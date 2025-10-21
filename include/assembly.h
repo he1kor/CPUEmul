@@ -4,18 +4,25 @@
 #include <array>
 
 #include <format>
+#include <string>
 
 #include "cpu.h"
 
 struct Assembly{
     static constexpr uint16_t INSTRUCTIONS_COUNT = 22;
     static constexpr uint16_t VALUE_BITS_COUNT = 10;
-    
 
-
-    uint16_t instructionCode;
+    uint16_t instructionCode = 0;
     bool isLiteral = false;
-    uint16_t value;
+    uint16_t value = 0;
+
+    Assembly() = default;
+    Assembly(const CPU<>::Instruction& instr) {
+        instructionCode = instr.fields.code;
+        isLiteral = instr.fields.isLiteral;
+        value = instr.fields.value;
+    }
+    std::string toString() const;
 };
 
 template <uint16_t IMEM_SIZE, uint16_t DMEM_SIZE>

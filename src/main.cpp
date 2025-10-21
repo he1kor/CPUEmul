@@ -14,34 +14,16 @@ int main(){
     constexpr uint32_t DMEM_SIZE = 1024;
 
     Assembler assembler;
-    auto result = assembler.translate(
-     R"(
-        LOAD 0 #Sum
-        STORE 0
 
-        LOAD 100 #Ptr + i
-        STORE 1
-        
-            LOAD *100
-            JZ 15
-            DEC
-            STORE 100
-
-            LOAD *1
-            INC
-            STORE 1
-            
-            LOADI *1
-            ADD *0 #Add loaded *(PTR+i) to sum
-            STORE 0
-            JMP 4
-        
-        LOAD *0
-        HLT
-    )");
-    if (!result)
-        std::cout << Assembler::toStr(result.error());
-
+    auto fileResult = assembler.translateFile("test.txt");
+    if (!fileResult){
+        std::cerr << Assembler::toStr(fileResult.error());
+        return 0;
+    }
+    if (!(*fileResult)){
+        std::cerr << Assembler::toStr(fileResult->error());
+        return 0;
+    }
     
     std::array<uint32_t, DMEM_SIZE> DMEM;
 
@@ -57,7 +39,7 @@ int main(){
 
     
     CPU cpu;
-    cpu.loadIMEM(flashAssembly<IMEM_SIZE, DMEM_SIZE>(*result));
+    cpu.loadIMEM(flashAssembly<IMEM_SIZE, DMEM_SIZE>(**fileResult));
     cpu.loadDMEM(DMEM);
 
 

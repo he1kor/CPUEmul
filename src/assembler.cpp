@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <format>
 #include <unordered_map>
+#include <fstream>
 
 #include <iostream>
 
@@ -14,14 +15,40 @@ std::string Assembler::toStr(TranslationError error){
     return std::format("Translation error: {}(line: {})\n", Assembler::toStr(error.code), error.line);
 }
 
-std::expected<std::vector<Assembly>, Assembler::TranslationError> Assembler::translate(const std::string &source, size_t instructionLimit) const{
-    size_t lines = calcLines(source);
-    if (lines > instructionLimit){
-        return std::unexpected(TranslationError{TranslationError::Code::BloatError, lines});
+std::expected<std::expected<std::vector<Assembly>, Assembler::TranslationError>, Assembler::FileError> Assembler::translateFile(const std::filesystem::path &filepath){
+
+    std::error_code ec;
+    if (!std::filesystem::is_regular_file(filepath, ec) || ec) {
+        return std::unexpected(FileError::FileNotFound);
     }
+    
+    std::ifstream file(filepath, std::ios::binary);
+    if (!file) {
+        return std::unexpected(FileError::AccessDenied);
+    }
+    
+    std::string source;
+    file.seekg(0, std::ios::end);
+    auto size = file.tellg();
+    
+    if (size == 0) {
+        return std::unexpected(FileError::EmptyFile);
+    }
+    
+    file.seekg(0, std::ios::beg);
+    source.resize(size);
+    
+    if (!file.read(source.data(), size)) {
+        return std::unexpected(FileError::ReadError);
+    }
+    
+    return translate(source);
+}
+
+std::expected<std::vector<Assembly>, Assembler::TranslationError> Assembler::translate(const std::string &source) const
+{
 
     std::vector<Assembly> output;
-    output.reserve(lines);
 
     std::istringstream iss(source);
     std::string line;

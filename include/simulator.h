@@ -36,9 +36,9 @@ public:
         if (state != State::RUNNING)
             throw std::runtime_error("The simulation is not running");
         onStep();
+        currentStep++;
         if (state == State::STOPPED)
             return false;
-        currentStep++;
         return true;
     }
 private:

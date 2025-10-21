@@ -125,12 +125,12 @@ private:
 
 
     void ADD() {
-        uint32_t result = ACC + DMEM[getOperand()];
+        uint32_t result = ACC + getOperand();
         C = (result < ACC);
         setAcc(result);
     }
     void SUB() {
-        uint32_t result = ACC - DMEM[getOperand()];
+        uint32_t result = ACC - getOperand();
         C = (result > ACC);
         setAcc(result);
     }
@@ -147,13 +147,13 @@ private:
 
 
     void AND(){
-        setAcc(ACC & DMEM[getOperand()]);
+        setAcc(ACC & getOperand());
     }
     void OR(){
-        setAcc(ACC | DMEM[getOperand()]);
+        setAcc(ACC | getOperand());
     }
     void XOR(){
-        setAcc(ACC ^ DMEM[getOperand()]);
+        setAcc(ACC ^ getOperand());
     }
     void NOT(){
         setAcc(!ACC);

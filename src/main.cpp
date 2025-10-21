@@ -22,8 +22,6 @@ int main(){
         LOAD 100 #Ptr + i
         STORE 1
         
-
-        #{
             LOAD *100
             JZ 15
             DEC
@@ -34,10 +32,9 @@ int main(){
             STORE 1
             
             LOADI *1
-            ADD 0 #Add loaded *(PTR+i) to sum
+            ADD *0 #Add loaded *(PTR+i) to sum
             STORE 0
             JMP 4
-        #}
         
         LOAD *0
         HLT

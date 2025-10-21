@@ -33,9 +33,10 @@ std::string Assembly::toString() const{
             result = "UNK(" + std::to_string(instructionCode) + ")";
         }
 
-        result += " ";
 
         if (instructionCode != Asm::NOP && instructionCode != Asm::HLT) {
+            
+            result += " ";
             if (isLiteral) {
                 result += "*";
             }

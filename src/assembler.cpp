@@ -15,36 +15,6 @@ std::string Assembler::toStr(TranslationError error){
     return std::format("Translation error: {}(line: {})\n", Assembler::toStr(error.code), error.line);
 }
 
-std::expected<std::expected<std::vector<Assembly>, Assembler::TranslationError>, Assembler::FileError> Assembler::translateFile(const std::filesystem::path &filepath){
-
-    std::error_code ec;
-    if (!std::filesystem::is_regular_file(filepath, ec) || ec) {
-        return std::unexpected(FileError::FileNotFound);
-    }
-    
-    std::ifstream file(filepath, std::ios::binary);
-    if (!file) {
-        return std::unexpected(FileError::AccessDenied);
-    }
-    
-    std::string source;
-    file.seekg(0, std::ios::end);
-    auto size = file.tellg();
-    
-    if (size == 0) {
-        return std::unexpected(FileError::EmptyFile);
-    }
-    
-    file.seekg(0, std::ios::beg);
-    source.resize(size);
-    
-    if (!file.read(source.data(), size)) {
-        return std::unexpected(FileError::ReadError);
-    }
-    
-    return translate(source);
-}
-
 std::expected<std::vector<Assembly>, Assembler::TranslationError> Assembler::translate(const std::string &source) const
 {
 

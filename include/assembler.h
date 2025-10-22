@@ -30,29 +30,11 @@ public:
         Code code;
         size_t line;
     };
-    enum class FileError {
-        FileNotFound,
-        NotAFile,
-        AccessDenied,
-        ReadError,
-        FileTooLarge,
-        EmptyFile,
-        InvalidEncoding
-    };
-    static constexpr std::array<std::string, 7> FileErrorStringCodes{
-        "FileNotFound",
-        "NotAFile",
-        "AccessDenied",
-        "ReadError",
-        "FileTooLarge",
-        "EmptyFile",
-        "InvalidEncoding"
-    };
+    
+
     static std::string toStr(TranslationError::Code code) {return TranslationError::stringCodes[static_cast<uint64_t>(code)];};
-    static std::string toStr(FileError code) {return FileErrorStringCodes[static_cast<uint64_t>(code)];};
     static std::string toStr(TranslationError error);
 
-    std::expected<std::expected<std::vector<Assembly>, TranslationError>, FileError> translateFile(const std::filesystem::path& filepath);
     std::expected<std::vector<Assembly>, TranslationError> translate(const std::string& source) const;
 private:
     size_t calcLines(std::string_view source) const;

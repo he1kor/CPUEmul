@@ -10,7 +10,7 @@ public:
     enum class DisplayMode {
         EVERY_FRAME,
         FIXED_FPS,
-        MANUAL
+        RESULT
     };
 
     ClockGenerator(double simulationFrequencyHz, double displayFrequencyHz = 0);

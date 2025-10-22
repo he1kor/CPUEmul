@@ -40,7 +40,7 @@ void ClockGenerator::setShouldDisplay(std::chrono::steady_clock::time_point nowT
             break;
         }
             
-        case DisplayMode::MANUAL:
+        case DisplayMode::RESULT:
             shouldDisplay = false;
             break;
     }
@@ -65,10 +65,6 @@ void ClockGenerator::start() {
     simulator->start();
     lastSimulationTick = std::chrono::steady_clock::now();
     lastDisplayTick = lastSimulationTick;
-    
-    if (displayCallback) {
-        displayCallback();
-    }
 }
 
 void ClockGenerator::stop() {

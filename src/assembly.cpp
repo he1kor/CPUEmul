@@ -37,7 +37,7 @@ std::string Assembly::toString() const{
         if (instructionCode != Asm::NOP && instructionCode != Asm::HLT) {
             
             result += " ";
-            if (isLiteral) {
+            if (!isLiteral) {
                 result += "*";
             }
             result += std::to_string(value);
